@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "509824763859",
+    "firebase_url": "https://hamada-16ca1.firebaseio.com",
+    "project_id": "hamada-16ca1",
+    "storage_bucket": "hamada-16ca1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509824763859:android:3cec9798e83e0f28845126",
+        "android_client_info": {
+          "package_name": "com.example.gtc_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509824763859-08gue9jio47jfar0p03l8ivrqm8c7af4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLCe_1hgo8ZBpPmfcGZLpV0mB0YYMFia8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509824763859-08gue9jio47jfar0p03l8ivrqm8c7af4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509824763859:android:e746bed6bedcb77e845126",
+        "android_client_info": {
+          "package_name": "com.hamada.sinwar.myproject2021"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509824763859-08gue9jio47jfar0p03l8ivrqm8c7af4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLCe_1hgo8ZBpPmfcGZLpV0mB0YYMFia8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509824763859-08gue9jio47jfar0p03l8ivrqm8c7af4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
