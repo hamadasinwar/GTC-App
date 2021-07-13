@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gtc_app/pages/home_page.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatelessWidget {
   final _numberController = TextEditingController();
@@ -21,15 +24,15 @@ class LoginPage extends StatelessWidget {
               controller: _numberController,
               inputFormatters: [WhitelistingTextInputFormatter(RegExp("[0-9]")),],
               decoration: InputDecoration(
-                  hintText: "رقم الطالب",
-                  prefixIcon: Icon(
-                    Icons.person,
-                    color: Colors.blue,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(30)),
+                hintText: "رقم الطالب",
+                prefixIcon: Icon(
+                  Icons.person,
+                  color: Colors.blue,
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(30)),
               ),
             ),
             SizedBox(height: 10.0,),
@@ -39,15 +42,15 @@ class LoginPage extends StatelessWidget {
               controller: _passwordController,
               inputFormatters: [WhitelistingTextInputFormatter(RegExp("[0-9]")),],
               decoration: InputDecoration(
-                  hintText: "كلمة السر",
-                  prefixIcon: Icon(
-                    Icons.lock,
-                    color: Colors.blue,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(30)),
+                hintText: "كلمة السر",
+                prefixIcon: Icon(
+                  Icons.lock,
+                  color: Colors.blue,
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(30)),
               ),
             ),
             SizedBox(height: 20.0,),
@@ -58,15 +61,23 @@ class LoginPage extends StatelessWidget {
                 color: Colors.blue[800],
                 child: Text("تسجبل دخول", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                 onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                    return HomePage();
-                  },));
+                  getData();
+                  /*Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                        return HomePage();
+                      },));*/
                 },
               ),
             )
           ],
-        ),
+        )
       ),
     );
+  }
+
+  getData()async{
+    var url = "http://10.0.0.215/GTC/index.php";
+    var res = await http.get(Uri.parse(url), headers: {"Accept":"application/json"});
+    var response = json.decode(res.body);
+    print(response);
   }
 }
