@@ -2,12 +2,26 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gtc_app/models/student.dart';
 import 'package:gtc_app/pages/home_page.dart';
 import 'package:http/http.dart' as http;
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final _numberController = TextEditingController();
   final _passwordController = TextEditingController();
+  final Student s = Student();
+  List<Student> students = [];
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +74,29 @@ class LoginPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
                 color: Colors.blue[800],
                 child: Text("تسجبل دخول", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                onPressed: () {
-                  getData();
-                  /*Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                        return HomePage();
-                      },));*/
+                onPressed: (){
+                  var check = false;
+                  if(_numberController.text != "" && _passwordController.text != ""){
+                    s.id = int.parse(_numberController.text);
+                    s.password = _passwordController.text;
+
+                    for(var student in students){
+                      if(s.id == student.id && s.password == student.password){
+                        check = true;
+                        Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (context) {
+                              return HomePage();
+                            },
+                          ));
+                        }
+                    }
+                  }else{
+                    check = true;
+                    showSnackBar(context, "الرجاء ملء الحقول");
+                  }
+                  if(!check){
+                    showSnackBar(context, "خطا رقم الطالب او كلمة المرور");
+                  }
                 },
               ),
             )
@@ -74,10 +106,20 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  getData()async{
+  Future getData()async{
     var url = "http://10.0.0.215/GTC/index.php";
     var res = await http.get(Uri.parse(url), headers: {"Accept":"application/json"});
     var response = json.decode(res.body);
-    print(response);
+    List<Student> st = [];
+    for(var d in response){
+      var s = Student(id: int.parse(d["id"].toString()), password: d["password"].toString());
+      st.add(s);
+    }
+    students = st;
+  }
+
+  showSnackBar(BuildContext context, String msg){
+    final snackBar = SnackBar(content: Text(msg));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

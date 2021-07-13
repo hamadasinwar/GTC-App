@@ -1,8 +1,8 @@
 class Student{
-  final int id;
-  final String password;
+  int? id;
+  String? password;
 
-  Student(this.id, this.password);
+  Student({this.id, this.password});
 
 
 }
