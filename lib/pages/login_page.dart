@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gtc_app/models/student.dart';
@@ -36,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
             TextField(
               keyboardType: TextInputType.number,
               controller: _numberController,
+              // ignore: deprecated_member_use
               inputFormatters: [WhitelistingTextInputFormatter(RegExp("[0-9]")),],
               decoration: InputDecoration(
                 hintText: "رقم الطالب",
@@ -51,10 +51,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 10.0,),
             TextField(
-              keyboardType: TextInputType.number,
               obscureText: true,
               controller: _passwordController,
-              inputFormatters: [WhitelistingTextInputFormatter(RegExp("[0-9]")),],
               decoration: InputDecoration(
                 hintText: "كلمة السر",
                 prefixIcon: Icon(
@@ -70,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 20.0,),
             ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(40.0)),
+              // ignore: deprecated_member_use
               child: RaisedButton(
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
                 color: Colors.blue[800],
@@ -80,15 +79,20 @@ class _LoginPageState extends State<LoginPage> {
                     s.id = int.parse(_numberController.text);
                     s.password = _passwordController.text;
 
-                    for(var student in students){
-                      if(s.id == student.id && s.password == student.password){
-                        check = true;
-                        Navigator.pushReplacement(context, MaterialPageRoute(
+                    if(students.isNotEmpty) {
+                      for (var student in students) {
+                        if (s.id == student.id &&
+                            s.password == student.password) {
+                          check = true;
+                          Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (context) {
                               return HomePage();
                             },
                           ));
                         }
+                      }
+                    }else{
+                      showSnackBar(context, "ERROR!");
                     }
                   }else{
                     check = true;
@@ -107,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future getData()async{
-    var url = "http://10.0.0.215/GTC/index.php";
+    var url = "http://10.0.3.151/GTC/getStudents.php";
     var res = await http.get(Uri.parse(url), headers: {"Accept":"application/json"});
     var response = json.decode(res.body);
     List<Student> st = [];

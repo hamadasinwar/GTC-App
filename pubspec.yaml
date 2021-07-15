@@ -32,6 +32,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   path_provider: ^1.6.24
   http: ^0.13.3
+  google_nav_bar: ^5.0.5
+
 
 dev_dependencies:
   flutter_test:
