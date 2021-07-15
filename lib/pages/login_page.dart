@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gtc_app/models/student.dart';
 import 'package:gtc_app/pages/home_page.dart';
+import 'package:gtc_app/utils/constant.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
@@ -111,8 +112,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future getData()async{
-    var url = "http://10.0.3.151/GTC/getStudents.php";
-    var res = await http.get(Uri.parse(url), headers: {"Accept":"application/json"});
+    var res = await http.get(Uri.parse(Constant().studentsUrl()), headers: {"Accept":"application/json"});
     var response = json.decode(res.body);
     List<Student> st = [];
     for(var d in response){
