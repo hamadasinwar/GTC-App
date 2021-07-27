@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                           check = true;
                           Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (context) {
-                              return HomePage();
+                              return HomePage(student: student,);
                             },
                           ));
                         }
@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
     var response = json.decode(res.body);
     List<Student> st = [];
     for(var d in response){
-      var s = Student(id: int.parse(d["id"].toString()), password: d["password"].toString());
+      var s = Student(id: int.parse(d["id"].toString()), password: d["password"].toString(), name: d["name"].toString(), address: d["address"].toString(), image: d["image"].toString(), phone: d["phone"].toString());
       st.add(s);
     }
     students = st;

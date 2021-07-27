@@ -1,23 +1,30 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:gtc_app/models/student.dart';
 import 'package:gtc_app/pages/grades_page.dart';
 import 'package:gtc_app/pages/login_page.dart';
 import 'package:gtc_app/pages/profile_page.dart';
-import 'package:gtc_app/utils/constant.dart';
-import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
+  final Student student;
+
+  const HomePage({required this.student});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   var _selectedIndex = 1;
-  List<Widget> pages = [ ProfilePage(), GradesPage()];
+  List<Widget> pages = [];
+  var _controller;
 
-
+  @override
+  void initState() {
+    pages = [ProfilePage(student: widget.student,), GradesPage(id: widget.student.id,)];
+    _controller = PageController(initialPage: _selectedIndex);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,55 +59,44 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: FutureBuilder<List<Student>>(
-        future: getData(),
-        builder: (context, snapshot) {
-          print(snapshot.data?[0]);
-          return pages[_selectedIndex];
+      body: PageView.builder(
+        controller: _controller,
+        itemCount: pages.length,
+        onPageChanged: (value) {
+          setState(() {
+            _selectedIndex = value;
+          });
+        },
+        itemBuilder: (context, index) {
+          return pages[index];
         },
       ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-          child: GNav(
-            selectedIndex: _selectedIndex,
-            rippleColor: Colors.grey[300]!,
-            hoverColor: Colors.grey[100]!,
-            color: Colors.grey,
-            activeColor: Colors.blue[800],
-            tabBackgroundColor: Colors.blue.withOpacity(0.1),
-            tabs: [
-              GButton(
-                icon: Icons.person_rounded,
-                text: 'الملف الشخصي',
-              ),
-              GButton(
-                icon: Icons.grade_rounded,
-                text: 'الدرجات',
-              ),
-            ],
-            onTabChange: (value) {
-              setState(() {
-                _selectedIndex = value;
-              });
-            },
+      bottomNavigationBar: GNav(
+        selectedIndex: _selectedIndex,
+        hoverColor: Colors.grey[100]!,
+        color: Colors.grey,
+        activeColor: Colors.white,
+        tabBackgroundColor: Colors.blue,
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        tabMargin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+        tabs: [
+          GButton(
+            icon: Icons.person_rounded,
+            text: 'الملف الشخصي',
           ),
-        ),
+          GButton(
+            icon: Icons.grade_rounded,
+            text: 'الدرجات',
+          ),
+        ],
+        onTabChange: (value) {
+          setState(() {
+            _selectedIndex = value;
+            _controller.jumpToPage(value);
+
+          });
+        },
       ),
     );
-  }
-
-  Future<List<Student>> getData() async {
-    var res =
-        await http.get(Uri.parse(Constant().studentsUrl()), headers: {"Accept": "application/json"});
-    var response = json.decode(res.body);
-    List<Student> st = [];
-    for (var d in response) {
-      var s = Student(
-          id: int.parse(d["id"].toString()),
-          password: d["password"].toString());
-      st.add(s);
-    }
-    return st;
   }
 }
