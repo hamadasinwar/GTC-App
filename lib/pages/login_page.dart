@@ -5,6 +5,7 @@ import 'package:gtc_app/models/student.dart';
 import 'package:gtc_app/pages/home_page.dart';
 import 'package:gtc_app/utils/constant.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -26,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Container(
         margin: EdgeInsets.all(15.0),
         child: Column(
@@ -74,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
                 color: Colors.blue[800],
                 child: Text("تسجبل دخول", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                onPressed: (){
+                onPressed: ()async{
                   var check = false;
                   if(_numberController.text != "" && _passwordController.text != ""){
                     s.id = int.parse(_numberController.text);
@@ -82,9 +84,15 @@ class _LoginPageState extends State<LoginPage> {
 
                     if(students.isNotEmpty) {
                       for (var student in students) {
-                        if (s.id == student.id &&
-                            s.password == student.password) {
+                        if (s.id == student.id && s.password == student.password) {
                           check = true;
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          prefs.setBool("isFirstTime", true);
+                          prefs.setInt("UID", student.id);
+                          prefs.setString("UName", student.name);
+                          prefs.setString("UImage", student.image);
+                          prefs.setString("UAddress", student.address);
+                          prefs.setString("UPhone", student.phone);
                           Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (context) {
                               return HomePage(student: student,);

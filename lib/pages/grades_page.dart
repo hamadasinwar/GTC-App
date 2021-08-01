@@ -20,45 +20,51 @@ class GradesPage extends StatelessWidget {
           for (var grade in snapshot.data!) {
             if (grade.id == this.id) {
               var _final = grade.finalExam! + grade.mid!;
-              rows.add(
-                  DataRow(cells: [
-                    DataCell(Center(child: Text("${grade.name}"))),
-                    DataCell(Center(child: Text("${grade.mid}"))),
-                    DataCell(Center(child: Text("${grade.finalExam}"))),
-                    DataCell(Center(
-                        child: Text("$_final", style: TextStyle(fontWeight: FontWeight.bold,color: _final<60?Colors.red[700]:Colors.black),))),
-                  ]
-                  ));
+              var d = DataRow(cells: [
+                DataCell(Center(child: Text("${grade.name}"))),
+                DataCell(Center(child: Text("${grade.mid}"))),
+                DataCell(Center(child: Text("${grade.finalExam}"))),
+                DataCell(Center(
+                    child: Text("$_final", style: TextStyle(fontWeight: FontWeight.bold,color: _final<60?Colors.red[700]:Colors.black),))),
+              ]
+              );
+              rows.add(d);
             }
           }
-        return Column(
+        return Stack(
           children: [
-            DataTable(
-              headingRowColor: MaterialStateProperty.all(Colors.blue),
-              showBottomBorder: true,
-              columns: [
-                DataColumn(
-                    label: Expanded(child: Center(child: Text("المادة", style: TextStyle(color: Colors.blue[50], fontWeight: FontWeight.bold),)))),
-                DataColumn(
-                    label: Expanded(child: Center(child: Text("فصلي", style: TextStyle(color: Colors.blue[50], fontWeight: FontWeight.bold),))),
-                    numeric: true),
-                DataColumn(
-                    label: Expanded(child: Center(child: Text("نهائي", style: TextStyle(color: Colors.blue[50], fontWeight: FontWeight.bold)))),
-                    numeric: true),
-                DataColumn(
-                    label: Expanded(child: Center(child: Text("المجموع", style: TextStyle(color: Colors.blue[50], fontWeight: FontWeight.w900)))),
-                    numeric: true),
-              ],
-              rows: rows
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            SingleChildScrollView(
+              child: Column(
                 children: [
-                  Text("المعدل الفصلي", style: TextStyle(fontSize: 17),),
-                  SizedBox(width: 10,),
-                  Text("${avg.toStringAsFixed(2)}", style: TextStyle(fontSize: 17, color: Colors.blue, fontWeight: FontWeight.bold),),
+                  DataTable(
+                      headingRowColor: MaterialStateProperty.all(Colors.blue),
+                      showBottomBorder: true,
+                      columns: [
+                        DataColumn(
+                            label: Expanded(child: Center(child: Text("المادة", style: TextStyle(color: Colors.blue[50], fontWeight: FontWeight.bold),)))),
+                        DataColumn(
+                            label: Expanded(child: Center(child: Text("فصلي", style: TextStyle(color: Colors.blue[50], fontWeight: FontWeight.bold),))),
+                            numeric: true),
+                        DataColumn(
+                            label: Expanded(child: Center(child: Text("نهائي", style: TextStyle(color: Colors.blue[50], fontWeight: FontWeight.bold)))),
+                            numeric: true),
+                        DataColumn(
+                            label: Expanded(child: Center(child: Text("المجموع", style: TextStyle(color: Colors.blue[50], fontWeight: FontWeight.w900)))),
+                            numeric: true),
+                      ],
+                      rows: rows
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("المعدل الفصلي", style: TextStyle(fontSize: 17),),
+                        SizedBox(width: 10,),
+                        Text("${avg.toStringAsFixed(2)}", style: TextStyle(fontSize: 17, color: Colors.blue, fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                  )
                 ],
               ),
             )

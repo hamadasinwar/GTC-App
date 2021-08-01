@@ -4,6 +4,7 @@ import 'package:gtc_app/models/student.dart';
 import 'package:gtc_app/pages/grades_page.dart';
 import 'package:gtc_app/pages/login_page.dart';
 import 'package:gtc_app/pages/profile_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   final Student student;
@@ -33,8 +34,10 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         actions: [
           PopupMenuButton<String>(
-            onSelected: (value) {
+            onSelected: (value)async{
               if (value == "تسجيل خروج") {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setBool("isFirstTime", false);
                 Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) {
                     return LoginPage();
@@ -93,7 +96,6 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             _selectedIndex = value;
             _controller.jumpToPage(value);
-
           });
         },
       ),
